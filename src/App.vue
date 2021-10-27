@@ -1,28 +1,42 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <div class="container grid-xl">
+      <saldo-table :balance="balance"></saldo-table>
+    </div>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue';
+import SaldoTable from './components/saldo-table/SaldoTable.vue';
+import api from './api';
 
 export default {
   name: 'App',
+  data: () => ({
+    balance: []
+  }),
   components: {
-    HelloWorld,
+    SaldoTable
   },
+  methods: {
+    async getInitBalance() {
+      try {
+        this.balance = await api.getBalance();
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  },
+  mounted() {
+    this.getInitBalance();
+  }
 };
 </script>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+<style lang="scss">
+  :root {
+    --color-saldo-passive: #fcfcfc;
+    --color-saldo-active: #fff7ef;
+    --color-saldo-summary: #f4fcf1;
+  }
 </style>
